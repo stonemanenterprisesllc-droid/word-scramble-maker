@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://stonemanenterprisesllc-droid.github.io/word-scramble-maker/sitemap.xml
+Sitemap: https://wordscramble.clickabletools.com/sitemap.xml
