@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Scramble Maker — Free Printable Word Scramble Puzzle Generator</title>
+<meta name="description" content="Make a free printable word scramble puzzle in seconds. Enter your own words or pick a theme, print the puzzle and answer key. No sign-up, no downloads.">
+<link rel="canonical" href="https://stonemanenterprisesllc-droid.github.io/word-scramble-maker/">
+<style>
+:root{--accent:#7c3aed;--accent-dark:#5b21b6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;color:#1f2937;background:#f8fafc}
+header{background:var(--accent);color:#fff;padding:1rem}
+header .wrap{max-width:760px;margin:0 auto}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:1.2rem}
+main{max-width:760px;margin:0 auto;padding:1rem}
+h1{font-size:1.5rem;margin:.75rem 0 .25rem}
+.tagline{color:#6b7280;margin-bottom:1rem}
+.tool{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+label{font-weight:600;display:block;margin:.75rem 0 .25rem}
+textarea,input[type=text]{width:100%;padding:.6rem;border:2px solid #d1d5db;border-radius:8px;font-size:1rem;font-family:inherit}
+textarea:focus,input:focus{outline:none;border-color:var(--accent)}
+textarea{min-height:110px}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+.chip{border:1px solid #d1d5db;background:#fff;border-radius:999px;padding:.35rem .8rem;cursor:pointer;font-size:.9rem}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.7rem 1.4rem;font-size:1.05rem;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--accent-dark)}
+.btn.alt{background:#fff;color:var(--accent);border:2px solid var(--accent);font-weight:600}
+.opts{margin:.5rem 0}
+.opts summary{cursor:pointer;color:var(--accent);font-weight:600}
+.opts label{display:inline-flex;align-items:center;gap:.4rem;font-weight:400;margin-right:1rem}
+.ad-slot{margin:1rem 0}
+#sheet{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1.5rem;margin-top:1rem;display:none}
+#sheet h2.title{text-align:center;font-size:1.5rem;margin-bottom:.25rem}
+#sheet .sub{text-align:center;color:#6b7280;font-size:.9rem;margin-bottom:1rem}
+.puz{width:100%;border-collapse:collapse}
+.puz td{padding:.55rem .3rem;border-bottom:1px dashed #e5e7eb;font-size:1.05rem}
+.puz .scr{font-family:ui-monospace,Consolas,monospace;font-weight:700;letter-spacing:.2em}
+.puz .ans-line{color:#9ca3af}
+.key{margin-top:1.25rem;border-top:2px solid #1f2937;padding-top:.75rem}
+.key h3{font-size:1rem}
+.key p{font-size:.9rem;columns:2}
+content-sections,section{display:block}
+article h2{margin:1.5rem 0 .5rem;font-size:1.2rem}
+article p,article li{margin:.5rem 0}
+article ul{padding-left:1.4rem}
+footer{max-width:760px;margin:2rem auto;padding:1rem;font-size:.85rem;color:#6b7280;border-top:1px solid #e5e7eb}
+footer a{color:#6b7280;margin-right:1rem}
+@media print{
+ body{background:#fff}
+ header,main>*:not(#sheet),footer,.noprint{display:none!important}
+ #sheet{display:block!important;border:none;box-shadow:none;padding:0}
+ .key{page-break-before:always}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="./">Word Scramble Maker</a></div></header>
+<main>
+<h1>Free Printable Word Scramble Puzzle Maker</h1>
+<p class="tagline">Type your words, click Make My Puzzle, and print — answer key included.</p>
+
+<div class="tool">
+<label for="words">Your words (one per line, or separated by commas — up to 25)</label>
+<textarea id="words" placeholder="birthday&#10;balloons&#10;presents&#10;candles&#10;cake"></textarea>
+<div class="row" id="themes">
+ <span style="align-self:center;color:#6b7280;font-size:.9rem">Or try a theme:</span>
+ <button class="chip" data-t="animals">Animals</button>
+ <button class="chip" data-t="birthday">Birthday</button>
+ <button class="chip" data-t="christmas">Christmas</button>
+ <button class="chip" data-t="ocean">Ocean</button>
+ <button class="chip" data-t="space">Space</button>
+ <button class="chip" data-t="thanksgiving">Thanksgiving</button>
+</div>
+<details class="opts">
+<summary>Options</summary>
+<div style="margin-top:.5rem">
+<label><input type="checkbox" id="optKey" checked> Include answer key page</label>
+<label><input type="checkbox" id="optLines" checked> Write-in answer lines</label>
+<label><input type="checkbox" id="optCaps"> UPPERCASE letters</label>
+</div>
+<label for="title" style="font-weight:600">Puzzle title</label>
+<input type="text" id="title" placeholder="My Word Scramble" maxlength="60">
+</details>
+<div class="row">
+<button class="btn" id="make">Make My Puzzle</button>
+<button class="btn alt noprint" id="print" style="display:none">🖨 Print Puzzle</button>
+<button class="btn alt noprint" id="reshuffle" style="display:none">↻ Re-scramble</button>
+</div>
+</div>
+
+<div class="ad-slot" data-ad="top"></div>
+
+<div id="sheet" aria-live="polite">
+<h2 class="title" id="sheetTitle">Word Scramble</h2>
+<p class="sub">Unscramble each word and write it on the line.</p>
+<table class="puz" id="puzRows"></table>
+<div class="key" id="keyBox"><h3>Answer Key</h3><p id="keyList"></p></div>
+</div>
+
+<article>
+<h2>How to make a printable word scramble</h2>
+<p>Enter up to 25 words in the box above — one per line or separated by commas — or click a
+theme button for a ready-made word list. Press <strong>Make My Puzzle</strong> and your word
+scramble appears instantly with every word shuffled. Press <strong>Print Puzzle</strong> and
+your browser prints a clean worksheet: the puzzle on page one and the answer key on page two,
+with no buttons, menus, or ads on the printout. If you'd like a different shuffle of the same
+words, click <strong>Re-scramble</strong>.</p>
+<h2>Who uses this word scramble generator?</h2>
+<ul>
+<li><strong>Teachers</strong> — turn this week's spelling or vocabulary list into a five-minute warm-up worksheet.</li>
+<li><strong>Parents and homeschoolers</strong> — practice spelling with words your child is actually learning.</li>
+<li><strong>Party planners</strong> — make a birthday, baby-shower, bridal-shower, or holiday game in seconds.</li>
+<li><strong>Activity directors</strong> — large-print-friendly puzzles for classrooms, camps, and senior centers.</li>
+</ul>
+<h2>Tips for a better puzzle</h2>
+<p>Words of 5–9 letters scramble best: long enough to be a challenge, short enough to stay fun.
+Avoid 3-letter words (too easy) and very long phrases. For younger kids, check
+<em>UPPERCASE letters</em> in Options — capital letters are easier to recognize. A themed list
+(all animals, all Christmas words) gives solvers helpful context, which is why our theme
+buttons group words that belong together.</p>
+<h2>How does the scrambler work?</h2>
+<p>Each word's letters are shuffled randomly right in your browser — nothing you type is sent
+to any server. The tool re-shuffles until the scrambled version differs from the original, so
+a word never appears unscrambled by accident. Your answer key preserves the original order so
+grading takes seconds.</p>
+</article>
+
+<div class="ad-slot" data-ad="bottom"></div>
+</main>
+
+<footer>
+<p><a href="./">Home</a> <a href="about.html">About</a> <a href="privacy.html">Privacy Policy</a> <a href="terms.html">Terms of Use</a></p>
+<p>&copy; 2026 Word Scramble Maker. All rights reserved.</p>
+<p>More free tools:
+<a href="https://stonemanenterprisesllc-droid.github.io/sleep-cycle-calculator/">Sleep Cycle Calculator</a>
+<a href="https://stonemanenterprisesllc-droid.github.io/caffeine-calculator/">Caffeine Half-Life Calculator</a>
+<a href="https://stonemanenterprisesllc-droid.github.io/random-phone-number-generator/">Random Phone Number Generator</a>
+<a href="https://stonemanenterprisesllc-droid.github.io/dragonborn-name-generator/">Dragonborn Name Generator</a></p>
+</footer>
+
+<script>
+const THEMES={
+ animals:["elephant","giraffe","penguin","dolphin","kangaroo","octopus","cheetah","raccoon","squirrel","hedgehog","flamingo","alligator"],
+ birthday:["birthday","balloons","presents","candles","frosting","confetti","streamers","surprise","goodie bag","party hat","invitation","celebrate"],
+ christmas:["reindeer","snowflake","ornament","stocking","mistletoe","gingerbread","sleigh","carolers","wreath","tinsel","chimney","present"],
+ ocean:["seashell","starfish","seaweed","dolphin","octopus","coral reef","seahorse","jellyfish","sandcastle","lighthouse","treasure","mermaid"],
+ space:["asteroid","galaxy","planet","rocket","astronaut","satellite","meteor","gravity","telescope","nebula","orbit","comet"],
+ thanksgiving:["turkey","gratitude","harvest","pumpkin","stuffing","cranberry","gravy","pilgrims","cornbread","family","feast","thankful"]
+};
+const $=id=>document.getElementById(id);
+let lastWords=[];
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',e=>{
+ e.preventDefault();$('words').value=THEMES[b.dataset.t].join("\n");
+}));
+function scramble(w){
+ const core=w.replace(/[^a-zA-Z]/g,'');
+ if(core.length<2)return w;
+ let s=w,tries=0;
+ do{
+  const letters=w.split('');
+  const idx=letters.map((c,i)=>/[a-zA-Z]/.test(c)?i:-1).filter(i=>i>=0);
+  const shuffled=idx.map(i=>letters[i]);
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  const out=letters.slice();idx.forEach((pos,k)=>out[pos]=shuffled[k]);
+  s=out.join('');tries++;
+ }while(s.toLowerCase()===w.toLowerCase()&&tries<20);
+ return s;
+}
+function build(){
+ const raw=$('words').value.split(/[\n,]+/).map(w=>w.trim()).filter(Boolean).slice(0,25);
+ if(!raw.length){alert('Please enter at least one word (or pick a theme).');return;}
+ lastWords=raw;
+ render();
+}
+function render(){
+ const caps=$('optCaps').checked, lines=$('optLines').checked, key=$('optKey').checked;
+ const t=$('title').value.trim()||'Word Scramble';
+ $('sheetTitle').textContent=t;
+ const rows=lastWords.map((w,i)=>{
+  let s=scramble(w); if(caps)s=s.toUpperCase();
+  return `<tr><td style="width:2rem;color:#6b7280">${i+1}.</td><td class="scr">${s}</td>`+
+   (lines?`<td class="ans-line" style="width:45%">______________________</td>`:``)+`</tr>`;
+ }).join('');
+ $('puzRows').innerHTML=rows;
+ $('keyList').textContent=lastWords.map((w,i)=>`${i+1}. ${w}`).join('   ');
+ $('keyBox').style.display=key?'block':'none';
+ $('sheet').style.display='block';
+ $('print').style.display='inline-block';
+ $('reshuffle').style.display='inline-block';
+ $('sheet').scrollIntoView({behavior:'smooth'});
+}
+$('make').addEventListener('click',build);
+$('reshuffle').addEventListener('click',()=>{if(lastWords.length)render();});
+$('print').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>
